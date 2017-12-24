@@ -6,6 +6,14 @@ import Control.Monad.Eff.Console (CONSOLE, log)
 import Data.Maybe (Maybe(..))
 import Graphics.Canvas
 
+{-
+TODO
+implement Game
+implement CanvasDisplay
+implement UI to initialise cells and start iterations
+ref to Game
+setInterval to iterate game state
+-}
 main :: forall e. Eff (console :: CONSOLE, canvas :: CANVAS | e) Unit
 main = do
   canvas <- getCanvasElementById "game"
