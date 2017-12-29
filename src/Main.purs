@@ -5,10 +5,11 @@ import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 import Data.Maybe (Maybe(..))
 import Graphics.Canvas
+import Game
+import CanvasView
 
 {-
 TODO
-implement Game
 implement CanvasDisplay
 implement UI to initialise cells and start iterations
 ref to Game
@@ -21,14 +22,13 @@ main = do
     Just c -> useCanvas c
     Nothing -> displayError
  
+board :: Board
+board = setCell (mkEmptyBoard (Width 10) (Height 10)) { x: 3, y: 4} true
+
 useCanvas :: forall e. CanvasElement -> Eff (canvas :: CANVAS | e) Unit
 useCanvas canvas = do
   ctx <- getContext2D canvas
-  _ <- beginPath ctx
-  _ <- moveTo ctx 100.0 100.0
-  _ <- lineTo ctx 200.0 200.0
-  _ <- stroke ctx
-  pure unit
+  paintBoard ctx board
 
 displayError :: forall e. Eff (console :: CONSOLE | e) Unit
 displayError = log "Looks like your browser doesn't support Canvas"
