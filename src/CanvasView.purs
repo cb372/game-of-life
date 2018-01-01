@@ -1,22 +1,20 @@
 module CanvasView where
 
-import Prelude
+import Prelude (Unit, bind, pure, unit, ($), (*), (/))
 import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
-import Data.Maybe (Maybe(..))
-import Data.Traversable
-import Data.Sequence
-import Data.Tuple
-import Data.Int
-import Graphics.Canvas
-import Game
+import Data.Traversable (traverse)
+import Data.Sequence (Seq)
+import Data.Tuple (Tuple(..))
+import Data.Int (toNumber)
+import Graphics.Canvas (CANVAS, Context2D, Rectangle, fillRect, strokeRect, setFillStyle)
+import Game (Board(..), Coord, Height(..), Width(..), mapWithIndex, toCoord)
 
 -- TODO make canvas size configurable?
 canvasWidth :: Int
-canvasWidth = 400
+canvasWidth = 680
 
 canvasHeight :: Int
-canvasHeight = 400
+canvasHeight = 680
 
 paintBoard :: forall e. Context2D -> Board -> Eff (canvas :: CANVAS | e) Unit
 paintBoard ctx (b @ Board w _ cells) = do
@@ -28,9 +26,12 @@ paintBoard ctx (b @ Board w _ cells) = do
 
 paintCell :: forall e. Context2D -> Board -> Coord -> Boolean -> Eff (canvas :: CANVAS | e) Unit
 paintCell ctx board coord true = do
+  _ <- setFillStyle "#000000" ctx
   _ <- fillRect ctx (coordToRectangle board coord)
   pure unit
 paintCell ctx board coord false = do
+  _ <- setFillStyle "#ffffff" ctx
+  _ <- fillRect ctx (coordToRectangle board coord)
   _ <- strokeRect ctx (coordToRectangle board coord)
   pure unit
 
